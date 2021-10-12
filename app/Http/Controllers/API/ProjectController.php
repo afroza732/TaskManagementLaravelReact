@@ -24,20 +24,20 @@ class ProjectController extends Controller
        ]);
     }
     public function store(Request $request){
+        
         $formData = $request->all();
         $validator = \Validator::make($formData,[
             'name' => 'required',
             'description' => 'required',
             'user_id' => 'required'
         ]);
+        
         if($validator->fails()){
             return response()->json([
-                'success' => 'false',
-                'message' => $validator->getMessageBag()->first(),
-                'data' => null
+                'errors' => $validator->getMessageBag(),
             ]); 
         }
-
+       // dd($validator->fails());
         $project = $this->projectRepository->create($request);
         return response()->json([
             'success' => 'true',

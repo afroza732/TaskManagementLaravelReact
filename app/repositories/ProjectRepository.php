@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 class ProjectRepository implements CrudInterface{
     public function getAll()
     {
-        $projects = Project::all();
+        $projects = Project::orderBy('id','desc')->get();
         return $projects;
     }
 
