@@ -8,11 +8,14 @@ import { Container } from 'react-bootstrap';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import ProjectList from './pages/projects/ProjectList';
+import { publicUrl } from '../Constant';
+import CreateProject from './pages/projects/CreateProject';
+import ViewProject from './pages/projects/viewProject';
+
 
 export default class App extends Component {
-   state = {
-    PUBLIC_URL : '/',
-  }
+
   render() {
     return (
       <Router>
@@ -20,13 +23,22 @@ export default class App extends Component {
       <Header />
         <Container>
           <Switch>
-            <Route path={`${this.state.PUBLIC_URL}about`}>
+            <Route path={`${publicUrl}about`} exact={true}>
               <About />
             </Route>
-            <Route path={`${this.state.PUBLIC_URL}contact`}>
+            <Route path={`${publicUrl}project`} exact={true}>
+              <ProjectList />
+            </Route>
+            <Route path={`${publicUrl}create/project`} exact={true}>
+              <CreateProject />
+            </Route>
+            <Route path={`${publicUrl}view/project/:id`} exact={true}>
+              <ViewProject />
+            </Route>
+            <Route path={`${publicUrl}contact`} exact={true}>
               <Contact />
             </Route>
-            <Route path={`${this.state.PUBLIC_URL}`}>
+            <Route path={`${publicUrl}`} exact={true}>
               <Home />
             </Route>
           </Switch>
