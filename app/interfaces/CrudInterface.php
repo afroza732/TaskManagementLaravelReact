@@ -7,6 +7,7 @@ interface CrudInterface{
     public function create(Request $request);
     public function edit($id,Request $request);
     public function delete($id);
+    public function getTaskByProjectId($id);
 }
 
 

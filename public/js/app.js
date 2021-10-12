@@ -89418,22 +89418,28 @@ var App = /*#__PURE__*/function (_Component) {
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_layouts_Header__WEBPACK_IMPORTED_MODULE_4__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         path: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_11__["publicUrl"], "about"),
-        exact: true
+        exact: true,
+        component: _pages_About__WEBPACK_IMPORTED_MODULE_8__["default"]
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_pages_About__WEBPACK_IMPORTED_MODULE_8__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         path: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_11__["publicUrl"], "project"),
-        exact: true
+        exact: true,
+        component: _pages_projects_ProjectList__WEBPACK_IMPORTED_MODULE_10__["default"]
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_pages_projects_ProjectList__WEBPACK_IMPORTED_MODULE_10__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         path: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_11__["publicUrl"], "create/project"),
-        exact: true
+        exact: true,
+        component: _pages_projects_CreateProject__WEBPACK_IMPORTED_MODULE_12__["default"]
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_pages_projects_CreateProject__WEBPACK_IMPORTED_MODULE_12__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         path: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_11__["publicUrl"], "view/project/:id"),
-        exact: true
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_pages_projects_viewProject__WEBPACK_IMPORTED_MODULE_13__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
+        exact: true,
+        component: _pages_projects_viewProject__WEBPACK_IMPORTED_MODULE_13__["default"]
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         path: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_11__["publicUrl"], "contact"),
-        exact: true
+        exact: true,
+        component: _pages_Contact__WEBPACK_IMPORTED_MODULE_9__["default"]
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_pages_Contact__WEBPACK_IMPORTED_MODULE_9__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         path: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_11__["publicUrl"]),
-        exact: true
+        exact: true,
+        component: _pages_Home__WEBPACK_IMPORTED_MODULE_7__["default"]
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_pages_Home__WEBPACK_IMPORTED_MODULE_7__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_layouts_Footer__WEBPACK_IMPORTED_MODULE_5__["default"], null))));
     }
   }]);
@@ -90046,20 +90052,21 @@ var ViewProject = /*#__PURE__*/function (_Component) {
     _this = _super.call.apply(_super, [this].concat(args));
 
     _defineProperty(_assertThisInitialized(_this), "state", {
-      ProjectList: [],
+      project: {},
+      taskList: [],
       isLoading: false
     });
 
-    _defineProperty(_assertThisInitialized(_this), "getprojectLists", function () {
+    _defineProperty(_assertThisInitialized(_this), "getProjectDetails", function () {
       _this.setState({
         isLoading: true
       });
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('http://127.0.0.1:8000/api/projects/').then(function (response) {
-        var ProjectList = response.data.data;
-
+      var id = _this.props.match.params.id;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("http://127.0.0.1:8000/api/projects/".concat(id)).then(function (response) {
         _this.setState({
-          ProjectList: ProjectList,
+          'project': response.data.data.project,
+          'taskList': response.data.data.tasks,
           isLoading: false
         });
       });
@@ -90071,24 +90078,34 @@ var ViewProject = /*#__PURE__*/function (_Component) {
   _createClass(ViewProject, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.getprojectLists();
+      this.getProjectDetails();
     }
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "mt-4 header-part"
+        className: "mt-2 header-part"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "float-left"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", null, "Project List", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Badge"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h2", null, this.state.project.name, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Badge"], {
         bg: "primary",
-        className: "mr-5"
-      }, this.state.ProjectList.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "float-right"
+        className: "mr-2"
+      }, this.state.taskList.length))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "float-left"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", null, this.state.project.description)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        style: {
+          "float": 'right'
+        }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-        to: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_4__["publicUrl"], "create/project"),
+        to: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_4__["publicUrl"], "edit/project"),
+        className: "btn btn-info",
+        style: {
+          marginRight: '3px'
+        }
+      }, "Edit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        to: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_4__["publicUrl"], "create/task"),
         className: "btn btn-success"
-      }, "Create Project")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      }, "+New Task")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "clearfix"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "text-center"
@@ -90097,37 +90114,13 @@ var ViewProject = /*#__PURE__*/function (_Component) {
         role: "status"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
         className: "visually-hidden"
-      }, "Loading..."))), this.state.ProjectList.map(function (project, index) {
+      }, "Loading..."))), this.state.taskList.map(function (task, index) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"], {
           className: "mt-3",
           key: index
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Header, {
-          as: "h5"
-        }, project.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Text, null, project.description), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", null, task.status == 1 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("del", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, task.name), '', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Badge"], {
           variant: "primary"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-          style: {
-            textDecoration: 'none',
-            color: 'white'
-          },
-          to: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_4__["publicUrl"], "view/project/").concat(project.id)
-        }, "View"), ' '), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-          variant: "secondary"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-          style: {
-            textDecoration: 'none',
-            color: 'white'
-          },
-          to: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_4__["publicUrl"], "edit/project/").concat(project.id)
-        }, "Edit"), ' '), ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-          variant: "danger"
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
-          style: {
-            textDecoration: 'none',
-            color: 'white'
-          },
-          to: "".concat(_Constant__WEBPACK_IMPORTED_MODULE_4__["publicUrl"], "delete/project/").concat(project.id)
-        }, "Delete"), ' '), ' '));
+        }, task.tasks_count)), task.status == 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, task.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Card"].Text, null, task.description)));
       }));
     }
   }]);

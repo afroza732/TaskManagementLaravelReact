@@ -7,9 +7,11 @@ use App\Models\Project;
 use App\repositories\ProjectRepository;
 use Illuminate\Http\Request;
 
+
 class ProjectController extends Controller
 {
     public $projectRepository;
+
 
     public function __construct(ProjectRepository $projectRepository)
     {
@@ -47,8 +49,10 @@ class ProjectController extends Controller
     }
 
     public function show($id){
-        $project = $this->projectRepository->findById($id);
-        if(is_null($project)){
+        $data['project'] = $this->projectRepository->findById($id);
+        $data['tasks'] = $this->projectRepository->getTaskByProjectId($id);
+    
+        if(is_null($data['project'])){
             return response()->json([
                 'success' => 'false',
                 'message' => 'Project list',
@@ -59,7 +63,7 @@ class ProjectController extends Controller
         return response()->json([
             'success' => 'true',
             'message' => 'Project list',
-            'data' =>  $project
+            'data' =>  $data
         ]);
     }
     public function update($id,Request $request){

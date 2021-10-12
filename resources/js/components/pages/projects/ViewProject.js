@@ -1,27 +1,28 @@
 import Axios from 'axios';
 import React, { Component } from 'react'
 import {Card ,Button,Badge,Spinner } from 'react-bootstrap';
-import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
+import {BrowserRouter as Router,Switch,Route,Link,params} from "react-router-dom";
 import { publicUrl } from '../../../Constant';
 
 export default class ViewProject extends Component {
    
     state = {
-        ProjectList : [],
+        project : {},
+        taskList : [],
         isLoading :false,
     }
     componentDidMount() {
-        this.getprojectLists();
+        this.getProjectDetails();
     };
    
-    getprojectLists = () => {
+    getProjectDetails = () => {
         
         this.setState({ isLoading :true});
-        
-        Axios.get('http://127.0.0.1:8000/api/projects/').then((response) => {
-           const ProjectList = response.data.data;
+        const id = this.props.match.params.id;
+        Axios.get(`http://127.0.0.1:8000/api/projects/${id}`).then((response) => {
            this.setState({
-              ProjectList,
+              'project' : response.data.data.project,
+              'taskList' : response.data.data.tasks,
               isLoading :false,
            });
         }); 
@@ -32,17 +33,21 @@ export default class ViewProject extends Component {
         return (
             
             <>
-                <div className="mt-4 header-part">
+                <div className="mt-2 header-part">
                     <div className="float-left">
-                        <h2 >Project List<Badge bg="primary" className="mr-5">{this.state.ProjectList.length}</Badge></h2>
+                        <h2 >{this.state.project.name}<Badge bg="primary" className="mr-2">{this.state.taskList.length}</Badge></h2>
                     </div>
-                   
-                    <div className="float-right">
-                        
-                    <Link to={`${publicUrl}create/project`} className="btn btn-success" >
-                        Create Project
-                    </Link>
-                        
+                    <div className="float-left">
+                        <p>{this.state.project.description}</p>
+                    </div>
+                    <div style={{ float: 'right'}}>
+                        <Link to={`${publicUrl}edit/project`} className="btn btn-info" style={{marginRight:'3px'}}>
+                            Edit
+                        </Link>     
+                        <Link to={`${publicUrl}create/task`} className="btn btn-success" >
+                            +New Task
+                        </Link>
+                       
                     </div>
                     <div className="clearfix"></div>
                 </div>
@@ -55,26 +60,22 @@ export default class ViewProject extends Component {
                 }
                 </div>
                {
-                   this.state.ProjectList.map((project,index) => (
+                   this.state.taskList.map((task,index) => (
                     <Card className="mt-3" key={index}>
                         <Card.Body>
-                        <Card.Header as="h5">{project.name}</Card.Header>
-                            <Card.Text>{project.description}</Card.Text>
-                            <Button variant="primary">
-                                <Link style={{ textDecoration: 'none', color: 'white' }} to={`${publicUrl}view/project/${project.id}`}>
-                                View
-                                </Link>{' '}
-                            </Button>{' '}
-                            <Button variant="secondary">
-                                <Link style={{ textDecoration: 'none', color: 'white' }} to={`${publicUrl}edit/project/${project.id}`}>
-                                Edit
-                                </Link>{' '}
-                            </Button>{' '}
-                            <Button variant="danger">
-                                <Link style={{ textDecoration: 'none', color: 'white' }} to={`${publicUrl}delete/project/${project.id}`}>
-                                Delete
-                                </Link>{' '}
-                            </Button>{' '}
+                            <p>
+                                {task.status == 1 && (
+                                    <del>
+                                        <strong>{task.name}</strong>{''}
+                                        <Badge variant="primary">{task.tasks_count}</Badge>
+                                    </del>
+                                )}
+                                {task.status == 0 && (
+                                   <strong>{task.name}</strong>
+                                   
+                                )}
+                            </p>
+                            <Card.Text>{task.description}</Card.Text>
                         </Card.Body>
                     </Card>
                    ))
