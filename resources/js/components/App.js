@@ -23,22 +23,21 @@ export default class App extends Component {
       <Header />
         <Container>
           <Switch>
-            <Route path={`${publicUrl}about`} exact={true}>
+            <Route path={`${publicUrl}about`} exact={true} component={About}>
               <About />
             </Route>
-            <Route path={`${publicUrl}project`} exact={true}>
+            <Route path={`${publicUrl}project`} exact={true} component={ProjectList}>
               <ProjectList />
             </Route>
-            <Route path={`${publicUrl}create/project`} exact={true}>
+            <Route path={`${publicUrl}create/project`} exact={true} component={CreateProject}>
               <CreateProject />
             </Route>
-            <Route path={`${publicUrl}view/project/:id`} exact={true}>
-              <ViewProject />
-            </Route>
-            <Route path={`${publicUrl}contact`} exact={true}>
+            <Route path={`${publicUrl}view/project/:id`} exact={true} component={ViewProject}/>
+          
+            <Route path={`${publicUrl}contact`} exact={true} component={Contact}>
               <Contact />
             </Route>
-            <Route path={`${publicUrl}`} exact={true}>
+            <Route path={`${publicUrl}`} exact={true} component={Home}>
               <Home />
             </Route>
           </Switch>

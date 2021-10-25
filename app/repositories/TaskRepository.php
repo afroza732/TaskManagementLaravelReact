@@ -18,10 +18,12 @@ class TaskRepository implements CrudInterface{
     }
     public function create(Request $request)
     {
+        //dd($request->all());
         $task = new Task();
         $task->name = $request->name;
         $task->description = $request->description;
         $task->project_id =  $request->project_id;
+        $task->status = 0;
         $task->save();
         return $task;
     }
@@ -31,6 +33,7 @@ class TaskRepository implements CrudInterface{
         $task->name = $request->name;
         $task->description = $request->description;
         $task->project_id = $request->project_id;
+        $task->status = $request->status;
         $task->save();
         return $task; 
     }
@@ -39,5 +42,8 @@ class TaskRepository implements CrudInterface{
         $task = $this->findById($id);
         $task->delete();
         return $task;  
+    }
+    public function getTaskByProjectId($id){
+        dd($id);
     }
 }

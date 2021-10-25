@@ -3,6 +3,7 @@ namespace App\repositories;
 
 use App\interfaces\CrudInterface;
 use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
 class ProjectRepository implements CrudInterface{
     public function getAll()
@@ -39,5 +40,10 @@ class ProjectRepository implements CrudInterface{
         $project = $this->findById($id);
         $project->delete();
         return $project;  
+    }
+    public function getTaskByProjectId($id)
+    {
+        $tasks = Task::where('project_id',$id)->get();
+        return $tasks;  
     }
 }
